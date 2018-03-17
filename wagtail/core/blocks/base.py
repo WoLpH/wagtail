@@ -58,7 +58,15 @@ class Block(metaclass=BaseBlock):
             state['dependencies'] = list(state['dependencies'])
             
         return state
+    
+    def __setstate__(self, state):
+        self.meta = self._meta_class()
 
+        if 'meta' in state:
+            self.meta.__dict__.update(state.pop('meta'))
+
+        self.__dict__.update(state)
+    
     """
     Setting a 'dependencies' list serves as a shortcut for the common case where a complex block type
     (such as struct, list or stream) relies on one or more inner block objects, and needs to ensure that
