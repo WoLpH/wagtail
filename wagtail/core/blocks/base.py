@@ -47,6 +47,17 @@ class Block(metaclass=BaseBlock):
         icon = "placeholder"
         classname = None
         group = ''
+        
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        
+        if 'meta' in state:
+            state['meta'] = state['meta'].__dict__
+            
+        if 'dependencies' in state:
+            state['dependencies'] = list(state['dependencies'])
+            
+        return state
 
     """
     Setting a 'dependencies' list serves as a shortcut for the common case where a complex block type
